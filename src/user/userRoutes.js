@@ -4,10 +4,15 @@ const {
   listUsers,
   updateUser,
   deleteUser,
+  loginUser,
 } = require("./userControllers");
-
+const { hashPass, comparePass, tokenCheck } = require("../middleware");
+// TODO: import middleware function bellow
 const userRouter = Router();
-userRouter.post("/addUser", createUser);
+
+userRouter.post("/addUser", hashPass, createUser);
+// TODO: call middleware function below
+userRouter.post("/loginUser", tokenCheck, comparePass, loginUser);
 userRouter.get("/listUsers", listUsers);
 userRouter.put("/updateUser", updateUser);
 userRouter.delete("/deleteUser", deleteUser);
@@ -39,4 +44,20 @@ module.exports = userRouter;
 // http://localhost:5001/deleteUser
 // {
 // 	"username": "Name3"
+// }
+
+// npm install bcrypt
+
+// POST
+// http://localhost:5001/loginUser
+
+// {
+// 	"username": "Name4",
+// 	"password": "test123"
+// }
+
+// {
+// "username": "Name7",
+// "password": "pass123",
+// 	"email": "email7@email.com"
 // }
