@@ -58,13 +58,44 @@ exports.tokenCheck = async (req, res, next) => {
   }
 };
 
+////////
+// Validations
+
 exports.validateEmail = async (req, res, next) => {
   try {
     if (validator.validate(req.body.email)) {
-      console.log("vaild email");
+      console.log("valid email");
       next();
     } else {
       throw new Error("invaild email please try again");
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+};
+
+exports.validatePassword = async (req, res, next) => {
+  try {
+    if (req.body.password.length >= 6) {
+      console.log("valid password");
+      next();
+    } else {
+      throw new Error("your password must to have at least 6 characteres");
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ error: error.message });
+  }
+};
+
+exports.validateUsername = async (req, res, next) => {
+  try {
+    if (req.body.username.length >= 4) {
+      console.log("valid password");
+      next();
+    } else {
+      throw new Error("your username must to have at least 4 characteres");
     }
   } catch (error) {
     console.log(error);

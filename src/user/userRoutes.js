@@ -10,13 +10,21 @@ const {
   hashPass,
   comparePass,
   tokenCheck,
+  validateUsername,
   validateEmail,
+  validatePassword,
 } = require("../middleware");
-// TODO: import middleware function bellow
+
 const userRouter = Router();
 
-userRouter.post("/addUser", validateEmail, hashPass, createUser);
-// TODO: call middleware function below
+userRouter.post(
+  "/addUser",
+  validateUsername,
+  validatePassword,
+  validateEmail,
+  hashPass,
+  createUser
+);
 userRouter.post("/loginUser", tokenCheck, comparePass, loginUser);
 userRouter.get("/listUsers", tokenCheck, listUsers);
 userRouter.put("/updateUser", updateUser);
