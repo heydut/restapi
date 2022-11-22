@@ -1,5 +1,5 @@
 const bcrypt = require("bcrypt");
-const { request } = require("express");
+const { req } = require("express");
 const jwt = require("jsonwebtoken");
 const User = require("../user/userModels");
 const validator = require("email-validator");
@@ -42,7 +42,7 @@ exports.tokenCheck = async (req, res, next) => {
       const decodedToken = await jwt.verify(token, process.env.SECRET);
       const user = await User.findById(decodedToken._id);
       if (user) {
-        request.user = user;
+        req.user = user;
       } else {
         throw new Error("User doesn't exist");
       }
@@ -58,9 +58,9 @@ exports.tokenCheck = async (req, res, next) => {
   }
 };
 
-exports.validateEmail = async (request, response, next) => {
+exports.validateEmail = async (req, res, next) => {
   try {
-    if (validator.validate(request.body.email)) {
+    if (validator.validate(req.body.email)) {
       console.log("vaild email");
       next();
     } else {
@@ -68,17 +68,17 @@ exports.validateEmail = async (request, response, next) => {
     }
   } catch (error) {
     console.log(error);
-    response.status(500).send({ error: error.message });
+    res.status(500).send({ error: error.message });
   }
 };
 
 //EMAIL VALIDATION WITHOUT USING A NPM LIBARY
 
-// exports.validateEmail = async (request, response, next) => {
+// exports.validateEmail = async (req, res, next) => {
 //     try {
 //         const regex = /^((?!\.)[\w\-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/;
-//         console.log(regex.test(request.body.email)) // returns true or false
-//         if (regex.test(request.body.email)) {
+//         console.log(regex.test(req.body.email)) // returns true or false
+//         if (regex.test(req.body.email)) {
 //             console.log("vaild email")
 //             next()
 //         } else {
@@ -87,6 +87,6 @@ exports.validateEmail = async (request, response, next) => {
 
 //     } catch (error) {
 //         console.log(error)
-//         response.status(500).send({error: error.message})
+//         res.status(500).send({error: error.message})
 //     }
 // }
