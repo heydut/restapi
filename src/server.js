@@ -1,10 +1,17 @@
 require("./db/connection");
 
-const express = require("express");
 const userRouter = require("./user/userRoutes");
+const express = require("express");
+const cors = require("cors");
 
 const app = express();
+app.use(cors());
 const port = process.env.PORT || 5001;
+
+// backend connection
+app.get("/health", (req, res) => {
+  res.status(200).send({ message: "API is working" });
+}); // backend connection
 
 app.use(express.json());
 app.use(userRouter);
